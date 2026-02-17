@@ -138,7 +138,19 @@ function displayMonitors(){
         // Replace template content with the data in localStorage
         monitorName.textContent = monitor["monitor-name"]
         monitringURL.textContent = monitor["monitor-url"]
-        checkInterval.innerText = monitor["check-interval"]  
+
+        //Logic to covert minutes and hours in check inteval
+        const covertedInterval = {
+            "2" : "2 Mins.",
+            "5": "5 Mins.",
+            "10": "10 Mins.",
+            "60": "60 Mins.",
+            "360": "6 Hrs.",
+            "720": "12 Hrs."   
+        }
+        const storedInterval = monitor["check-interval"] 
+        checkInterval.innerText = covertedInterval[storedInterval]  
+
         // Logic to convert alert type into human redable text
         const convertAlertType = {
             "url-down": "URL is unreachable",
@@ -150,7 +162,7 @@ function displayMonitors(){
 
         // Required keyword detection
         const requiredKeywordValue = monitor["required-keyword"];
-        if (requiredKeywordValue !== undefined){
+        if (requiredKeywordValue && requiredKeywordValue.trim() !== ""){
             requiredKeyword.textContent = requiredKeywordValue
         }  
         else{
@@ -164,3 +176,20 @@ function displayMonitors(){
 }
 
 displayMonitors()
+
+function actionHandler(){
+    const actionButton = document.getElementsByClassName("monitor-actions-buttons")
+    const allMonitors = JSON.parse(localStorage.getItem("monitors")) || [];
+    
+    for (let  i = 0; i < allMonitors.length;  i++) {
+        const currentMonitor = allMonitors[i];
+
+        actionButton.addEventListener("click", function(){
+            console.log(actionButton.getAttribute("class"));
+        })
+
+    }
+    
+}
+
+actionHandler()
